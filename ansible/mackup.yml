@@ -1,0 +1,11 @@
+- hosts: all
+  tasks:
+    - name: setup mackup
+      copy: src=files/mackup.cfg dest=~/.mackup.cfg force=no
+
+    - name: clone mackup backup
+      git: repo=https://grepnull@bitbucket.org/grepnull/mackup-backup.git dest=~/.mackup-backup update=no
+
+    - name: change to ssh
+      command: git remote set-url origin git@bitbucket.org:grepnull/mackup-backup.git chdir=~/.mackup-backup
+      

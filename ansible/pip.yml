@@ -1,0 +1,6 @@
+- hosts: all
+  tasks:
+    - name: pip install everything
+      pip: executable=/usr/local/bin/pip name={{ item }} state=present
+      with_lines:
+        - cat ../pip.txt

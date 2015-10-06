@@ -1,0 +1,6 @@
+- hosts: all
+  tasks:
+    - name: gem install everything
+      gem: executable=/usr/local/bin/gem name={{ item }} state=present
+      with_lines:
+        - cat ../gems.txt

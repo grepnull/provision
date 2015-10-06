@@ -1,0 +1,14 @@
+- hosts: all
+  tasks:
+    - name: create LaunchAgents folder
+      file: dest=~/Library/LaunchAgents state=directory
+      
+    - name: install homebrew daemons
+      file: src=/usr/local/opt/{{ item }}/homebrew.mxcl.{{ item }}.plist path=~/Library/LaunchAgents/homebrew.mxcl.{{ item }}.plist state=link
+      with_items:
+        - emacs
+
+    - name: Setup launch agents for services
+      command: launchctl load ~/Library/LaunchAgents/homebrew.mxcl.{{ item }}.plist
+      with_items:
+        - emacs

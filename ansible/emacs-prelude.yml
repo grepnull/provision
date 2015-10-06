@@ -1,0 +1,10 @@
+- hosts: all
+  tasks:
+    - name: clone prelude repo
+      git: repo=https://github.com/bbatsov/prelude.git dest=~/.prelude update=no
+
+    - name: remove old .emacs.d
+      file: dest=~/.emacs.d state=absent
+
+    - name: link prelude repo
+      file: src=~/.prelude dest=~/.emacs.d state=link

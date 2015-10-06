@@ -1,0 +1,22 @@
+- hosts: all
+  tasks:
+    - name: clone config repo
+      git: repo=git@github.com:grepnull/config.git dest=~/.configurations
+
+    - name: link bash configs
+      file: src=~/.configurations/bashrc/{{ item }} dest=~/.{{ item }} state=link force=yes
+      with_items:
+        - bashrc
+        - bash_profile
+        - bashrc.d
+
+    - name: link prelude customizations
+      file: src=~/.configurations/bashrc/{{ item }} dest=~/.emacs.d/personal/{{ item | basename }} state=link force=yes
+      with_fileglob:
+        - ~/.configurations/emacs/personal/*.el
+
+    - name: link git configurations
+      file: src=~/.configurations/git/{{ item }} dest=~/.{{ item }} state=link force=yes
+      with_items:
+        - gitconfig
+        - gitignore_global

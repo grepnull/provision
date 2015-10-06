@@ -1,0 +1,13 @@
+- hosts: all
+  sudo: yes
+  tasks:
+    - name: create alternatives directory
+      file: dest=/opt/alternatives/bin state=directory
+      
+    - name: create alternatives to GNU versions of tools
+      file: src=/usr/local/bin/g{{ item }} dest=/opt/alternatives/bin/{{ item }} state=link force=yes
+      with_items:
+        - chmod
+        - find
+        - readlink
+        - sed
