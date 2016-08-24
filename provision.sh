@@ -2,9 +2,7 @@
 
 set -e
 
-# This script supports OS X 10.10 (Yosemite) and possibly higher though
-# as of this writing there is nothing higher and so it is not tested.
-MIN_OSX_VERSION=10
+MIN_OSX_VERSION=11
 
 OSX_VERSION=$(sw_vers -productVersion | awk -F "." '{print $2}')
 
@@ -42,38 +40,6 @@ function newline {
     done
 }
 
-function install_xcode_cli_tools {
-    if xcode-select -p &> /dev/null; then
-        ok "You already have the XCode CLI tools installed."
-        return
-    fi
-
-    ###
-    ### Get and install Xcode CLI tools
-    ### https://github.com/timsutton/osx-vm-templates/blob/master/scripts/xcode-cli-tools.sh
-    ###
-
-    newline 2
-    notice "Installing/upgrading XCode CLI tools. This does not install XCode itself."
-    warn "If you need a full install of XCode, install it after this script is done"
-    warn "from the Mac App Store."
-
-    # create the placeholder file that's checked by CLI updates' .dist code
-    # in Apple's SUS catalog
-    # otherwise softwareupdate won't offer the CLI tools as an option
-    touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
-
-    # find the right package id to install
-    PROD=$(softwareupdate -l 2> /dev/null | grep "Command Line Tools" | head -n 1 | awk -F"*" '{print $2}' | sed -e 's/^ *//')
-    info "Will install '${PROD}'"
-    # install it
-    # amazingly, it won't find the update if we put the update ID in double-quotes
-    if [ "${PROD}" ]; then
-        softwareupdate -i "${PROD}" -v
-    else
-        echo "Looks like you already have the XCode CLI tools installed. Continuing."
-    fi
-}
 
 function install_ansible {
     echo $LOCAL_PW | sudo -S easy_install pip
@@ -103,7 +69,7 @@ function install_homebrew {
 
     # echo into the ruby install script so that it doesn't prompt for user consent
     # there's an "if STDIN.tty?" conditional in the script
-    echo "" | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" || true
+    echo "" | /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" || true
 
     notice Installing homebrew bundle
     brew tap homebrew/bundle
