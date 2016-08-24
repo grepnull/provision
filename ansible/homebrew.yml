@@ -1,9 +1,0 @@
-- hosts: all
-  tasks:
-    - name: Install homebrew
-      shell: ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-      args:
-        creates: /usr/local/Cellar
-
-    - name: Tap homebrew bundle
-      homebrew_tap: tap=homebrew/bundle state=present
