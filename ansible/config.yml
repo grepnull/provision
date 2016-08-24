@@ -3,6 +3,9 @@
     - name: clone config repo
       git: repo=git@github.com:grepnull/config.git dest=~/.configurations
 
+    - name: set git author email
+      command: git config user.email vincer@vincer.net chdir=~/.configurations
+
     - name: link bash configs
       file: src=~/.configurations/bashrc/{{ item }} dest=~/.{{ item }} state=link force=yes
       with_items:

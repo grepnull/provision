@@ -8,4 +8,6 @@
 
     - name: change to ssh
       command: git remote set-url origin git@bitbucket.org:grepnull/mackup-backup.git chdir=~/.mackup-backup
-      
+
+    - name: set git author email
+      command: git config user.email vincer@vincer.net chdir=~/.mackup-backup

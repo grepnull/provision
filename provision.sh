@@ -30,6 +30,9 @@ for level in ${LEVELS}; do
          }"
 done
 
+export GOPATH=~/.go
+export PATH=$PATH:~/.go/bin
+
 function newline {
     count=$1
     if [ -z $count ]; then
@@ -80,6 +83,12 @@ function install_homebrew_packages {
     brew bundle
 }
 
+function install_go_packages {
+    notice Installing all golang packages.
+    go get github.com/moul/advanced-ssh-config/cmd/assh
+    info Done installing golang packages
+}
+
 function install_python_packages {
     notice Installing various python packages
     cd ansible
@@ -124,7 +133,8 @@ function create_alternatives {
 }
 
 function setup_mackup {
-    notice Setting mackup up
+    notice Setting mackup up. Will clone via https, so find your bitbucket password.
+    notice Will switch to ssh later when key is restored.
     cd ansible
     ansible-playbook -i inventory mackup.yml
     cd ..
@@ -133,6 +143,7 @@ function setup_mackup {
 function run_mackup {
     notice Restoring preferences via mackup
     mackup -f restore
+    notice Waiting for ssh key id_rsa to appear in ~/.ssh.
     while [ ! -f ~/.ssh/id_rsa ]; do
 	echo -n "."
 	sleep 1
@@ -154,6 +165,9 @@ install_homebrew_packages
 newline
 
 create_alternatives
+newline
+
+install_go_packages
 newline
 
 install_python_packages
