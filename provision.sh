@@ -147,9 +147,6 @@ unset HISTFILE
 check_osx_version
 newline
 
-install_xcode_cli_tools
-newline
-
 install_homebrew
 newline
 
